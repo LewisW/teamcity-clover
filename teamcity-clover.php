@@ -35,12 +35,12 @@ $crapAmount = 0;
 
 foreach (array_slice($argv, 1) as $path) {
     if (!file_exists($path)) {
-        echo "clover.xml does not exist: $path\n";
+        echo "$path does not exist\n";
         exit(1);
     }
 
 
-    echo "Parsing clover.xml from: $path\n";
+    echo "Parsing $path\n";
     $cloverXml = new SimpleXMLElement($path, null, true);
     $metrics = $cloverXml->project->metrics;
 
