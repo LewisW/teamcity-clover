@@ -30,6 +30,9 @@ $data = array(
     'NonCommentLinesOfCode' => 0
 );
 
+$crapValues = array();
+$crapAmount = 0;
+
 foreach (array_slice($argv, 1) as $path) {
     if (!file_exists($path)) {
         echo "clover.xml does not exist: $path\n";
@@ -67,8 +70,6 @@ foreach (array_slice($argv, 1) as $path) {
 
 
     if ($crapThreshold) {
-        $crapValues = array();
-        $crapAmount = 0;
         foreach ($cloverXml->xpath('//@crap') as $crap) {
             $crap = (float) $crap;
             $crapValues[] = $crap;
@@ -76,16 +77,18 @@ foreach (array_slice($argv, 1) as $path) {
                 $crapAmount++;
             }
         }
-
-        $crapValuesCount = count($crapValues);
-        $crapTotal = array_sum($crapValues);
-
-        $data['CRAPAmount'] = $crapAmount;
-        $data['CRAPPercent'] = $crapValuesCount ? $crapAmount / $crapValuesCount * 100 : 0;
-        $data['CRAPTotal'] = $crapTotal;
-        $data['CRAPAverage'] = $crapValuesCount ? $crapTotal / $crapValuesCount : 0;
-        $data['CRAPMaximum'] = max($crapValues);
     }
+}
+
+if ($crapValues) {
+    $crapValuesCount = count($crapValues);
+    $crapTotal = array_sum($crapValues);
+
+    $data['CRAPAmount'] = $crapAmount;
+    $data['CRAPPercent'] = $crapValuesCount ? $crapAmount / $crapValuesCount * 100 : 0;
+    $data['CRAPTotal'] = $crapTotal;
+    $data['CRAPAverage'] = $crapValuesCount ? $crapTotal / $crapValuesCount : 0;
+    $data['CRAPMaximum'] = max($crapValues);
 }
 
 foreach ($data as $key => $value) {
